@@ -62,6 +62,10 @@ def path_to_word(grid, path):
     return ''.join([grid[p] for p in path]) #gets list of letters from position in path and joins them imto a string
 
 
+def word_in_dictionary(word, dict):
+    return word in dict
+
+
 def search(grid, dictionary):    #function that accepts a grid and a dictionary
     
     #search through the paths to locate words by matching strings to words in a dictionary
@@ -82,7 +86,7 @@ def search(grid, dictionary):    #function that accepts a grid and a dictionary
     #of each neighbour and so on.
     def do_search(path): 
         word = path_to_word(grid, path)
-        if word in dictionary:
+        if word_in_dictionary(word, dictionary):
             paths.append(path)
         for next_pos in neighbours[path[-1]]:
             if next_pos not in path:
@@ -121,7 +125,7 @@ def display_words(words):
 def main():
     #this is the function that will run the whole project
     
-    grid = make_grid(2, 2)  #change here from (3,3) to (2,2) to check runtimes
+    grid = make_grid(3, 3)  #change here from (3,3) to (2,2) to check runtimes
     dictionary = get_dictionary('words.txt')
     words = search(grid, dictionary)
     # for word in words:        this was inserted into function display_words above

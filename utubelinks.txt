@@ -1,1 +1,10 @@
 Introduction                                                    https://youtu.be/VXcpijc3NDI
+Algorithm Efficiency                                            https://youtu.be/oljiatrLW8g
+Profiling                                                       https://youtu.be/FnwEzbjWx5E
+
+
+
+
+
+profiler:
+python3 -m cProfile boggle.py
