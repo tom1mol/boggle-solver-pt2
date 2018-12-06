@@ -61,10 +61,10 @@ def path_to_word(grid, path):
     
     return ''.join([grid[p] for p in path]) #gets list of letters from position in path and joins them imto a string
 
-
-def word_in_dictionary(word, dict):
-    return word in dict
-
+""" #delete this as we changed search function back to accessing the set of words directly
+def word_in_dictionary(word, dict):     
+    return word in dict                
+"""
 
 def search(grid, dictionary):    #function that accepts a grid and a dictionary
     
@@ -72,6 +72,8 @@ def search(grid, dictionary):    #function that accepts a grid and a dictionary
     
     neighbours = all_grid_neighbours(grid)  #1st get neighbours of every position in the grid
     paths = []                              #then get paths list to capture all paths that form valid words
+    full_words, stems = dictionary      #unpack dictionary tuple into stems and full_words
+    
 #store words as paths rather than strings to distinguish between letters. by location. could be 2 A's in the grid
 
     #this function is nested inside main search function.cant be called directly
@@ -86,8 +88,10 @@ def search(grid, dictionary):    #function that accepts a grid and a dictionary
     #of each neighbour and so on.
     def do_search(path): 
         word = path_to_word(grid, path)
-        if word_in_dictionary(word, dictionary):
+        if word in full_words:  #full_words..check if real word
             paths.append(path)
+        if word not in stems:   #use stems to check if we can ignore rest of path we're currently on
+            return
         for next_pos in neighbours[path[-1]]:
             if next_pos not in path:
                 do_search(path + [next_pos])
@@ -109,13 +113,23 @@ def get_dictionary(dictionary_file):
     
     #load dictionary file
     
-    if not dictionary_file.startswith('/'):                         #added this for challenge 2x2
-        #if not absolute, then make path relative to our location
-        dictionary_file = os.path.join(SCRIPT_PATH, dictionary_file)    #added this for challenge 2x2
+#3 lines below were removed for partial words section
+    # if not dictionary_file.startswith('/'):                         #added this for challenge 2x2
+    #     #if not absolute, then make path relative to our location
+    #     dictionary_file = os.path.join(SCRIPT_PATH, dictionary_file)    #added this for challenge 2x2
+        
+    full_words, stems= set(), set()     #rtn stems in addition to full words. 
+                                        #dictionary function now returning tuple of 2 sets.full words & stems
     
     with open(dictionary_file) as f:
-        return [w.strip().upper() for w in f]
-        
+        for word in f:
+            word = word.strip().upper()
+            full_words.add(word)
+            
+            for i in range(1, len(word)):
+                stems.add(word[:i])
+    return full_words, stems  
+                                            
 def display_words(words):
     for word in words:
         print(word)
@@ -125,7 +139,7 @@ def display_words(words):
 def main():
     #this is the function that will run the whole project
     
-    grid = make_grid(3, 3)  #change here from (3,3) to (2,2) to check runtimes
+    grid = make_grid(4, 4)  #change here from (3,3) to (2,2) to check runtimes
     dictionary = get_dictionary('words.txt')
     words = search(grid, dictionary)
     # for word in words:        this was inserted into function display_words above

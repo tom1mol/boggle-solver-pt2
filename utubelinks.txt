@@ -1,6 +1,8 @@
 Introduction                                                    https://youtu.be/VXcpijc3NDI
 Algorithm Efficiency                                            https://youtu.be/oljiatrLW8g
 Profiling                                                       https://youtu.be/FnwEzbjWx5E
+The Right Data Structure                                        https://youtu.be/PnEOi3HShmY
+Partial Words                                                   https://youtu.be/Yd2XH3mLbd8
 
 
 
@@ -8,3 +10,7 @@ Profiling                                                       https://youtu.be
 
 profiler:
 python3 -m cProfile boggle.py
+
+python3 -m cProfile -s cumtime boggle.py
+
+python3 -m unittest
